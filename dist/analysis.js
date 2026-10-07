@@ -4,7 +4,7 @@
   const data=window.UFO_DATA?.analysis;
   if(!data)return;
   const $=id=>document.getElementById(id);
-  const colors=['#c0a9ef','#6c3ce9','#19a899','#e85b93'];
+  const colors=['#c0a9ef','#6c3ce9','#19a899','#e85b93','#df8a00'];
   const models=[...new Set(data.rolling.map(row=>row.model))];
   const pct=x=>(x*100).toFixed(1)+'%';
   const escape=x=>String(x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -38,7 +38,7 @@
     const metric=$('metric-select').value,pr=metric==='pr_auc';
     const valid=models.map(m=>average(m,metric));
     const test=models.map(m=>data.metrics.find(r=>r.model===m && r.split==='test_2013')[metric]);
-    $('comparison-chart').innerHTML=bars(['M1','M2','M3','M4'],[{name:'시간순 검증 평균',values:valid,color:'#6c3ce9'},{name:'2013년 시험',values:test,color:'#19a899'}],pr?.25:1,x=>x.toFixed(3),`${pr?'PR-AUC(AP)':'ROC-AUC'} 모델 비교`,true);
+    $('comparison-chart').innerHTML=bars(models.map((_,i)=>`M${i+1}`),[{name:'시간순 검증 평균',values:valid,color:'#6c3ce9'},{name:'2013년 시험',values:test,color:'#19a899'}],pr?.25:1,x=>x.toFixed(3),`${pr?'PR-AUC(AP)':'ROC-AUC'} 모델 비교`,true);
     const key=pr?'PR-AUC(AP)':'ROC-AUC';
     $('comparison-insight').textContent=`${key} 기준 M2의 검증 평균은 ${valid[1].toFixed(3)}이고, 2013년 시험 점수는 ${test[1].toFixed(3)}입니다. 시험에서는 M3가 ${test[2].toFixed(3)}으로 M2보다 높았습니다. 변수를 더 많이 넣는다고 검증 평균이 항상 좋아지지는 않았습니다.`;
   }

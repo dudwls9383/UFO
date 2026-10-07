@@ -24,8 +24,9 @@ for(const region of d.regions){
     assert(Number.isFinite(r.top_hour) && r.top_hour>=0 && r.top_hour<=23);
   }
 }
-assert.equal(d.analysis.metrics.length,8);
-assert.equal(d.analysis.rolling.length,12);
+assert.equal(d.analysis.metrics.length,10);
+assert.equal(d.analysis.rolling.length,15);
+assert(d.analysis.metrics.some(r=>r.model==='M5_random_forest'));
 assert.equal(d.analysis.calibration.length,5);
 for(const region of d.regions){
   const p=d.analysis.patterns[region.region_id];
