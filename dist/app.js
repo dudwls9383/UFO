@@ -86,7 +86,8 @@
     $('low-sample').hidden=row.reports_with_known_shape>=30;
     $('low-sample').textContent=`표본 적음 (n=${row.reports_with_known_shape})`;
   }
-  function render(){renderRegions();renderCalendar();renderDetail();window.UFO_ANALYSIS?.update(state.region);}
+  function render(){renderRegions();renderCalendar();renderDetail();window.UFO_ANALYSIS?.update(state.region);window.UFO_EXPERIENCE?.update(state.region);}
+  document.addEventListener('ufo-region-select',event=>{if(data.regions.some(r=>r.region_id===event.detail))setDate(event.detail,state.month,state.day);});
   $('year-select').innerHTML=Array.from({length:5},(_,i)=>`<option value="${2026+i}">${2026+i}년</option>`).join('');
   $('year-select').addEventListener('change',event=>{const year=Number(event.target.value);setDate(state.region,state.month,Math.min(state.day,new Date(year,state.month,0).getDate()),year);});
   $('month-select').innerHTML=Array.from({length:12},(_,i)=>`<option value="${i+1}">${i+1}월</option>`).join('');

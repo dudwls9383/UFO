@@ -35,5 +35,14 @@ for(const region of d.regions){
 }
 const html=fs.readFileSync(new URL('dist/index.html',import.meta.url),'utf8');
 assert(!html.includes('2013년 백테스트 시연'));
-for(const name of ['app','analysis'])new vm.Script(fs.readFileSync(new URL(`dist/${name}.js`,import.meta.url),'utf8'));
+for(const name of ['app','analysis','experience-main'])new vm.Script(fs.readFileSync(new URL(`dist/${name}.js`,import.meta.url),'utf8'));
+const e=d.experience;
+assert.equal(e.shape.candidates.length,11);
+assert.equal(e.shape.class_scores.slice(0,5).reduce((sum,r)=>sum+r.support,0),8708);
+assert(e.shape.best_validation.accuracy<.7);
+assert.equal(e.time.hours.reduce((sum,n)=>sum+n,0),80332);
+assert.equal(e.map.cells.reduce((sum,c)=>sum+c[2],0),e.map.rows);
+assert.equal(e.duration.scatter.length,650);
+assert(e.duration.scatter.every(p=>p.every(Number.isFinite)&&p[0]<=86400));
+assert(fs.existsSync(new URL('dist/assets/shape-specimens.png',import.meta.url)));
 console.log('PASS: all 10,956 dates, leap day, bounds, grades, no future labels, charts, syntax.');

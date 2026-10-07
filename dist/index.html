@@ -7,10 +7,12 @@
   <meta name="theme-color" content="#6C3CE9">
   <title>UFO 출현 예측 달력 · 팔로미 관측소</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%236C3CE9'/%3E%3Cellipse cx='16' cy='19' rx='12' ry='4' fill='%23FFD23F'/%3E%3Cpath d='M9 17a7 7 0 0 1 14 0' fill='%23fff'/%3E%3C/svg%3E">
-  <link rel="stylesheet" href="styles.css">
-  <script src="data.js" defer></script>
-  <script src="analysis.js" defer></script>
-  <script src="app.js" defer></script>
+  <link rel="stylesheet" href="styles.css?v=3">
+  <script src="data.js?v=3" defer></script>
+  <script src="analysis.js?v=3" defer></script>
+  <link rel="stylesheet" href="experience.css?v=3">
+  <script src="experience-main.js?v=3" defer></script>
+  <script src="app.js?v=3" defer></script>
 </head>
 <body>
 <svg class="svg-defs" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><defs>
@@ -55,7 +57,8 @@
         <div class="sample-line"><span id="sample-count"></span><span id="low-sample" class="sample-badge" hidden>표본 적음</span></div><p class="history-caption">2000~2010년 이 지역 같은 달의 과거 보고 통계입니다. 날짜별 모양·시각 예측값과는 구분해 참고하세요.</p>
       </aside>
     </div>
-    <section id="analysis" class="analysis-section" aria-labelledby="analysis-title">
+    <section id="analysis" class="experience-section" aria-label="모양·지역·시간 분석"></section>
+    <section id="calendar-method" class="analysis-section" aria-labelledby="analysis-title">
       <div class="analysis-heading"><span class="eyebrow">FROM DATA TO INSIGHT</span><h2 id="analysis-title">우리 모델은 무엇을 배웠을까요?</h2><p>모델 비교부터 지역·시간·모양까지. 그래프와 설명을 함께 읽는 분석 노트입니다.</p></div>
       <div class="analysis-kpis"><div><span>달력 범위</span><strong>2026–2030</strong><small>6개 지역 · 10,956개 지역-날짜</small></div><div><span>선택 모델</span><strong>M2</strong><small>계절·요일 + 최근 보고 이력</small></div><div><span>시간순 검증 평균 PR-AUC(AP)</span><strong id="rolling-kpi">—</strong><small>과거 평가 점수 · 미래 정확도 아님</small></div></div>
       <article class="analysis-card card"><div class="analysis-card-heading"><div><span class="analysis-number">01 / MODEL COMPARISON</span><h3>입력을 더하면 성능도 좋아질까요?</h3></div><label class="metric-control">비교 지표 <select id="metric-select"><option value="pr_auc">PR-AUC(AP)</option><option value="roc_auc">ROC-AUC</option></select></label></div><div class="analysis-layout"><div><div id="comparison-chart" class="svg-chart"></div><div class="chart-legend"><span><i style="background:#6c3ce9"></i>시간순 검증 평균</span><span><i style="background:#19a899"></i>2013년 시험</span></div><button class="chart-download" data-chart="comparison-chart">그래프 SVG 저장</button></div><div class="analysis-explanation"><span class="reading-label">어떻게 읽나요?</span><p>네 모델 모두 로지스틱 회귀이며, 알고리즘 대신 입력 변수의 조합을 바꿨습니다. 보라색은 세 번의 시간순 검증 평균, 초록색은 별도로 남겨 둔 2013년 시험 결과입니다.</p><p id="comparison-insight"></p><p>희소한 신고 여부를 구분하는 데 초점을 맞춰 PR-AUC(AP)로 모델을 선택했습니다. 이 점수는 정답률(%)이 아니며, 미래 성능을 나타내지 않습니다.</p></div></div><div class="table-scroll"><table class="model-table"><caption>실제로 비교한 네 모델의 입력</caption><thead><tr><th>모델</th><th>입력 변수</th><th>역할</th></tr></thead><tbody><tr><td>M1</td><td>월·요일 sin/cos</td><td>계절·요일 기준 모델</td></tr><tr><td>M2</td><td>M1 + 전날·최근 7일·30일 보고 수</td><td>검증 평균으로 선택한 모델</td></tr><tr><td>M3</td><td>M2 + 지역 ID</td><td>지역 차이의 추가 효과 비교</td></tr><tr><td>M4</td><td>M3 + 지역-월 대표 모양·시간 비중</td><td>과거 요약 특성의 추가 효과 비교</td></tr></tbody></table></div></article>

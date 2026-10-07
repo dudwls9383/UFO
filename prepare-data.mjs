@@ -16,5 +16,6 @@ if(new Set(payload.calendar.map(row=>row.region_id+'/'+row.date)).size!==10956)t
 payload.stats={baseline,gradeRates,rocAuc:Number(metric.roc_auc),prAuc:Number(metric.pr_auc)};
 payload.thresholds=thresholds;
 payload.analysis=JSON.parse(fs.readFileSync(path.join(output,'website_analysis.json'),'utf8'));
+payload.experience=JSON.parse(fs.readFileSync(path.join(output,'experience_data.json'),'utf8'));
 fs.writeFileSync(path.join(root,'dist/data.js'),'window.UFO_DATA = '+JSON.stringify(payload)+';\n','utf8');
 console.log(JSON.stringify({rows:payload.calendar.length,regions:payload.regions.length,stats:payload.stats}));
