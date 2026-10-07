@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ko" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="과거 UFO 목격 보고를 바탕으로 지역과 날짜별 신고 가능성, 모양, 시간대를 탐색하는 2013년 달력 시연.">
+  <meta name="theme-color" content="#6C3CE9">
+  <title>UFO 출현 예측 달력 · 팔로미 관측소</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%236C3CE9'/%3E%3Cellipse cx='16' cy='19' rx='12' ry='4' fill='%23FFD23F'/%3E%3Cpath d='M9 17a7 7 0 0 1 14 0' fill='%23fff'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+  <script src="data.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+<svg class="svg-defs" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><defs>
+  <symbol id="star" viewBox="0 0 24 24"><path d="m12 2 2.9 6.2 6.8.9-5 4.7 1.3 6.8-6-3.3-6 3.3 1.3-6.8-5-4.7 6.8-.9Z"/></symbol>
+  <symbol id="pin" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="3"/></symbol>
+  <symbol id="clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 2"/></symbol>
+  <symbol id="chevron" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></symbol>
+  <symbol id="moon" viewBox="0 0 24 24"><path d="M20 15a9 9 0 0 1-11-11 9 9 0 1 0 11 11Z"/></symbol>
+  <symbol id="info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6m0-11v1"/></symbol>
+  <symbol id="shape-light" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 1v3m0 16v3M1 12h3m16 0h3M4 4l2 2m12 12 2 2M4 20l2-2M18 6l2-2"/></symbol>
+  <symbol id="shape-triangle" viewBox="0 0 24 24"><path d="M12 3 22 21H2Z"/></symbol>
+  <symbol id="shape-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/></symbol>
+  <symbol id="shape-fireball" viewBox="0 0 24 24"><path d="M13 2s2 5 0 8c5-1 5-4 5-4s5 8 2 13-14 4-16-2c-2-5 4-10 4-10s-1 5 2 6c1-4 3-11 3-11Z"/></symbol>
+  <symbol id="shape-other" viewBox="0 0 24 24"><path d="M8 8a4 4 0 1 1 6 4c-2 1-2 2-2 3m0 3v1"/><circle cx="12" cy="12" r="10"/></symbol>
+</defs></svg>
+<div class="page-shell">
+  <header class="masthead">
+    <a class="brand" href="#" aria-label="팔로미 관측소 홈"><span class="brand-mark"><svg><use href="#star"/></svg></span><span>팔로미 관측소<small>FOLLOW ME · OBSERVATORY</small></span></a>
+    <div class="header-actions"><a href="#trust" class="trust-link">데이터 안내</a><button id="theme-toggle" class="icon-button" aria-label="다크 모드 켜기"><svg class="icon"><use href="#moon"/></svg></button></div>
+  </header>
+  <main>
+    <section class="page-heading"><div><span class="eyebrow">COSMIC CALENDAR / 2013</span><h1>UFO 출현 예측 달력<span class="title-star">✦</span></h1><p>어디서, 언제, 어떤 모습으로? 기록 속 우주를 탐색해 보세요.</p></div><span class="edition">관측 일지 <strong>01</strong><small>TEAM 팔로미</small></span></section>
+    <aside class="notice" role="note"><svg class="icon"><use href="#info"/></svg><p><strong>2013년 백테스트 시연</strong><span>과거 목격 보고 기록 기반 · 날짜별 신고 가능성을 비교하는 통계 모델입니다.</span></p><span class="notice-tag">과거 기록 기반</span></aside>
+    <section class="region-section" aria-label="지역 선택"><div class="section-label"><svg class="icon"><use href="#pin"/></svg>관측 지역</div><div id="region-tabs" class="region-tabs" role="tablist" aria-label="관측 지역"></div><div id="region-meta" class="region-meta"></div></section>
+    <div class="workspace">
+      <section class="calendar-card card" aria-label="월별 예측 달력">
+        <div class="calendar-header"><div><span class="eyebrow" id="calendar-region">SEATTLE</span><h2 id="month-title">2013년 7월</h2></div><div class="month-controls"><button id="prev-month" class="icon-button" aria-label="이전 달"><svg class="icon flipped"><use href="#chevron"/></svg></button><select id="month-select" aria-label="월 선택"></select><button id="next-month" class="icon-button" aria-label="다음 달"><svg class="icon"><use href="#chevron"/></svg></button></div></div>
+        <div class="calendar-help"><span><i class="selection-key"></i> 날짜를 선택해 상세 기록을 확인하세요</span><span>상대 등급 기준</span></div>
+        <div class="weekday-row" aria-hidden="true"><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span class="saturday">토</span><span class="sunday">일</span></div>
+        <div id="calendar-grid" class="calendar-grid" role="group" aria-label="날짜 선택"></div>
+        <div id="legend" class="legend" aria-label="색상 등급 범례"></div>
+        <div class="top-dates"><div class="top-title"><svg class="icon"><use href="#star"/></svg><h3>이달의 추천 날짜</h3><span>TOP 3</span></div><div id="top-dates" class="top-date-list"></div></div>
+      </section>
+      <aside class="detail-card card" id="detail-panel" aria-labelledby="detail-date">
+        <div class="detail-topline"><span class="eyebrow">관측 기록 상세</span><span id="detail-city" class="city-chip"></span></div>
+        <h2 id="detail-date">7월 1일 월요일</h2><span class="year-label">2013년</span>
+        <div id="detail-grade" class="detail-grade"></div>
+        <p id="detail-description" class="detail-description"></p>
+        <div class="probability-section"><div class="probability-heading"><span>참고용 예측 확률</span><strong id="detail-probability"></strong></div><div class="probability-track"><div id="probability-fill"></div><span id="probability-baseline" title="2013년 전체 기준 보고율"></span></div><div class="scale-labels"><span>0%</span><span id="baseline-label">기준 보고율 12.4%</span><span>30%</span></div></div>
+        <div class="history-heading"><h3>이 지역의 과거 관측 패턴</h3><span>같은 달 기록</span></div>
+        <div class="pattern-card"><span class="pattern-icon"><svg class="icon" id="shape-icon"><use href="#shape-light"/></svg></span><div><span class="pattern-label">가장 많이 보고된 모양</span><strong id="detail-shape"></strong><span id="shape-share" class="pattern-sub"></span></div></div>
+        <div class="pattern-card"><span class="pattern-icon mint"><svg class="icon"><use href="#clock"/></svg></span><div><span class="pattern-label">가장 많이 기록된 시각</span><strong id="detail-hour"></strong><span class="pattern-sub">기록 시각 기준 · 시간대 미확인</span></div></div>
+        <div class="sample-line"><span id="sample-count"></span><span id="low-sample" class="sample-badge" hidden>표본 적음</span></div><p class="history-caption">2000~2010년 이 지역 같은 달의 과거 보고 통계입니다. 날짜별 모양·시각 예측값과는 구분해 참고하세요.</p>
+      </aside>
+    </div>
+    <section class="evidence-card card"><div class="evidence-copy"><span class="eyebrow">등급과 실제 기록</span><h2>높은 등급에서 보고가<br>얼마나 더 많았을까요?</h2><p>2013년의 등급별 실제 보고율입니다.<br>색이 진할수록 상대 순위가 높습니다.</p></div><div class="chart-wrap"><div id="evidence-chart" class="evidence-chart" role="img" aria-label="등급별 실제 신고율"></div><p class="chart-caption">점선은 전체 기준 보고율입니다. 등급 차이는 제한적이며 높은 등급도 출현을 보장하지 않습니다.</p></div></section>
+    <details id="trust" class="trust-card card"><summary><span><svg class="icon"><use href="#info"/></svg>이 달력은 어떻게 만들어졌나요?</span><span class="summary-more">데이터와 모델 안내 <svg class="icon"><use href="#chevron"/></svg></span></summary><div class="trust-content"><article><h3>무엇을 계산하나요?</h3><p>0.5° 격자 지역에서 하루 동안 목격 보고가 1건 이상 기록될 가능성을 계산합니다. 실제 물리적 출현 빈도와 신고 빈도에는 차이가 있습니다.</p></article><article><h3>모델 성능</h3><p id="model-performance"></p><p>상대 순위를 탐색하는 시연용 모델이며, 강한 예측 성능을 확보한 상태는 아닙니다.</p></article><article><h3>입력과 시간 범위</h3><p>월·요일 주기와 전날·최근 7일·30일의 실제 신고 수를 사용합니다. 2000~2010년 학습, 2011~2012년 검증, 2013년 시험 결과입니다.</p></article><article><h3>시연의 범위</h3><p>전날까지의 기록을 사용한 하루 앞 예측을 달력에 모았습니다. 한 달 전체를 미리 예측한 결과가 아니며, 현재·미래 날짜는 제공하지 않습니다. 지역은 6개 고정 격자입니다.</p></article></div></details>
+    <div id="error-message" role="alert" hidden></div>
+  </main>
+  <footer><span><strong>팔로미</strong> · UFO 데이터 프로젝트</span><span>과거 기록을 통해, 우주를 조금 더 가까이.</span><span>DATA 2000–2013</span></footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,4 @@
+preview-*.png
+*.tar.gz
+*.zip
+.sites-runtime/
