@@ -35,7 +35,7 @@ for(const region of d.regions){
 }
 const html=fs.readFileSync(new URL('dist/index.html',import.meta.url),'utf8');
 assert(!html.includes('2013년 백테스트 시연'));
-for(const name of ['app','analysis','experience-main'])new vm.Script(fs.readFileSync(new URL(`dist/${name}.js`,import.meta.url),'utf8'));
+for(const name of ['app','analysis','experience-main','weather-sky'])new vm.Script(fs.readFileSync(new URL(`dist/${name}.js`,import.meta.url),'utf8'));
 const e=d.experience;
 assert.equal(e.shape.candidates.length,11);
 assert.equal(e.shape.class_scores.slice(0,5).reduce((sum,r)=>sum+r.support,0),8708);
@@ -45,4 +45,15 @@ assert.equal(e.map.cells.reduce((sum,c)=>sum+c[2],0),e.map.rows);
 assert.equal(e.duration.scatter.length,650);
 assert(e.duration.scatter.every(p=>p.every(Number.isFinite)&&p[0]<=86400));
 assert(fs.existsSync(new URL('dist/assets/shape-specimens.png',import.meta.url)));
+assert(fs.existsSync(new URL('dist/assets/weather-sprites-v4.png',import.meta.url)));
+const weatherSandbox={window:{}};
+vm.runInNewContext(fs.readFileSync(new URL('dist/weather-sky.js',import.meta.url),'utf8'),weatherSandbox);
+const sky=weatherSandbox.window.UFO_WEATHER_SKY;
+for(const level of d.thresholds.labels)assert.equal(sky.favorable({level}),['high','very_high'].includes(level));
+assert.equal(sky.favorable(null),false);
+assert.equal(sky.condition(null).phase,'unknown');
+assert.equal(sky.condition({is_day:1,weather_code:0,cloud_cover:0}).phase,'day');
+assert.equal(sky.condition({is_day:0,weather_code:3,cloud_cover:95}).tone,'cloudy');
+assert.equal(sky.condition({is_day:1,weather_code:61,cloud_cover:95}).label,'비');
+assert(fs.readFileSync(new URL('dist/weather-sky.css',import.meta.url),'utf8').includes('prefers-reduced-motion:reduce'));
 console.log('PASS: all 10,956 dates, leap day, bounds, grades, no future labels, charts, syntax.');

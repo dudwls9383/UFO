@@ -29,3 +29,11 @@ Colab에서 기존 모델 결과를 새로 만든 경우 미래 시나리오 데
 
 날씨: Open-Meteo current.temperature_2m, current.cloud_cover, daily.sunset. 6개 도시 대표 좌표를 사용하며 이용자 위치를 요청하지 않습니다. 도시 현지 날짜·시각을 표시하고 10분간 메모리에 캐시합니다. 지역을 빠르게 바꿀 때 오래된 응답은 표시하지 않습니다. 실패 시 빈 값과 재시도 안내를 표시합니다. 날씨는 모델 입력이 아닙니다.
 
+## 날씨 카드 그래픽 (v4)
+
+`weather-sky.js`와 `weather-sky.css`에서 Open-Meteo의 `current.is_day`·`weather_code`·`cloud_cover`를 하늘 분위기에 연결합니다. 정보가 없으면 중립 배경과 확인 중/연결 실패 표시를 사용합니다. 현재 날씨와 달력 날짜는 독립적입니다. 작은 UFO는 선택한 달력 날짜의 상대 등급이 high/very_high일 때만 나타나며 날짜·지역·등급을 재미용 표시로 안내합니다.
+
+구름 18~24초, 해·달 12초, UFO 7초 주기의 작은 transform 움직임을 사용하며 `prefers-reduced-motion: reduce`에서 애니메이션을 끕니다. 정적 원본 그림을 CSS로 이동시키며 데이터나 달력 확률은 바꾸지 않습니다.
+
+새 그림: `dist/assets/weather-sprites-v4.png`. 내장 imagegen으로 생성한 투명 2×2 스프라이트입니다. 최종 프롬프트: “Use case: stylized-concept. Asset type: a SINGLE transparent 2x2 sprite atlas for a Korean weather card in a playful UFO calendar site. Square canvas, exactly four evenly-sized square cells with generous clear margins; no drawn dividers or background. Top-left cell: one fluffy volumetric white cloud with slight lavender shadow, cloud cluster only. Top-right cell: a warm glowing yellow sun orb with very subtle short rays, isolated. Bottom-left cell: a small luminous pale ivory crescent moon with lavender edge. Bottom-right cell: one small cute three-quarter-view flying saucer UFO, lavender purple smooth ceramic body, mint glass dome, warm yellow rim lights, no beam, no pilot. Cohesive premium soft 3D/clay illustration style, clean smooth silhouettes, gentle studio lighting. Each object centered strictly within its own quarter and not crossing into any adjacent cell. Objects occupy about 60% of cell area. The four assets will be CSS-cropped and animated very subtly over a weather-app sky background. NO letters, NO numbers, NO text, NO interface, NO watermarks, NO ground, NO checkerboard; genuinely transparent background with preserved alpha.”
+
