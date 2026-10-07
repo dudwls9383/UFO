@@ -8,20 +8,20 @@
   const weekdays = ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'];
   const shapeNames = {light:'Light · 빛',triangle:'Triangle · 삼각형',circle:'Circle · 원형',fireball:'Fireball · 불덩어리',other:'Other · 기타'};
   const percent = value => `${(value*100).toFixed(1)}%`;
-  const state = {region:'R01',month:7,day:1};
+  const state = {region:'R01',year:2026,month:7,day:1};
   const data = window.UFO_DATA;
-  if (!data || !Array.isArray(data.calendar) || data.calendar.length !== 2190) {
+  if (!data || !Array.isArray(data.calendar) || data.calendar.length !== 10956) {
     $('error-message').hidden = false;
     $('error-message').textContent = '달력 데이터를 읽지 못했습니다. index.html, app.js, styles.css, data.js를 같은 폴더에 두고 다시 열어주세요.';
     return;
   }
   const rows = new Map(data.calendar.map(row => [`${row.region_id}/${row.date}`,row]));
-  const dateKey = (month, day) => `2013-${String(month).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+  const dateKey = (month, day, year=state.year) => `${year}-${String(month).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
   const dots = level => `<span class="grade-dots" aria-hidden="true">${levels.map((_,i)=>`<i class="${i<=levels.indexOf(level)?'filled':''}"></i>`).join('')}</span>`;
   const current = () => rows.get(`${state.region}/${dateKey(state.month,state.day)}`);
-  function setDate(region,month,day) {
-    if (!data.regions.some(r=>r.region_id===region) || !Number.isInteger(month) || month<1 || month>12 || !Number.isInteger(day) || !rows.has(`${region}/${dateKey(month,day)}`)) throw new Error('2013년 데이터에 있는 지역·월·날짜를 선택하세요.');
-    Object.assign(state,{region,month,day});
+  function setDate(region,month,day,year=state.year) {
+    if (!data.regions.some(r=>r.region_id===region) || !Number.isInteger(year) || year<2026 || year>2030 || !Number.isInteger(month) || month<1 || month>12 || !Number.isInteger(day) || !rows.has(`${region}/${dateKey(month,day,year)}`)) throw new Error('2026~2030년 달력에 있는 지역·연도·월·날짜를 선택하세요.');
+    Object.assign(state,{region,year,month,day});
     render();
     return current();
   }
@@ -33,13 +33,14 @@
   }
   function renderCalendar() {
     $('calendar-region').textContent = cityNames[state.region].toUpperCase();
-    $('month-title').textContent = `2013년 ${state.month}월`;
+    $('month-title').textContent = `${state.year}년 ${state.month}월`;
+    $('year-select').value = state.year;
     $('month-select').value = state.month;
-    $('prev-month').disabled = state.month===1;
-    $('next-month').disabled = state.month===12;
-    for (const id of ['prev-month','next-month']) $(id).title = $(id).disabled ? '시연 데이터는 2013년만 제공해요' : $(id).getAttribute('aria-label');
-    const first = (new Date(2013,state.month-1,1).getDay()+6)%7;
-    const count = new Date(2013,state.month,0).getDate();
+    $('prev-month').disabled = state.year===2026 && state.month===1;
+    $('next-month').disabled = state.year===2030 && state.month===12;
+    for (const id of ['prev-month','next-month']) $(id).title = $(id).disabled ? '달력 범위는 2026~2030년입니다' : $(id).getAttribute('aria-label');
+    const first = (new Date(state.year,state.month-1,1).getDay()+6)%7;
+    const count = new Date(state.year,state.month,0).getDate();
     let html = '<span class="day-empty" aria-hidden="true"></span>'.repeat(first);
     for (let day=1;day<=count;day++) {
       const row=rows.get(`${state.region}/${dateKey(state.month,day)}`);
@@ -54,27 +55,28 @@
         const offset={ArrowLeft:-1,ArrowRight:1,ArrowUp:-7,ArrowDown:7}[event.key];
         if (offset===undefined) return;
         event.preventDefault();
-        const date=new Date(2013,state.month-1,Number(button.dataset.day)+offset);
-        if (date.getFullYear()!==2013) return;
-        setDate(state.region,date.getMonth()+1,date.getDate());
+        const date=new Date(state.year,state.month-1,Number(button.dataset.day)+offset);
+        if (date.getFullYear()<2026 || date.getFullYear()>2030) return;
+        setDate(state.region,date.getMonth()+1,date.getDate(),date.getFullYear());
         $('calendar-grid').querySelector('.selected').focus();
       });
     });
-    const top=data.calendar.filter(row=>row.region_id===state.region && row.month===state.month).sort((a,b)=>b.probability-a.probability || a.date.localeCompare(b.date)).slice(0,3);
+    const top=data.calendar.filter(row=>row.region_id===state.region && row.year===state.year && row.month===state.month).sort((a,b)=>b.probability-a.probability || a.date.localeCompare(b.date)).slice(0,3);
     $('top-dates').innerHTML=top.map((row,i)=>`<button class="top-date" data-day="${Number(row.date.slice(-2))}" aria-label="추천 ${i+1}위 ${Number(row.date.slice(-2))}일 선택"><span><strong>${state.month}월 ${Number(row.date.slice(-2))}일</strong><small>${levelNames[levels.indexOf(row.level)]}</small></span><span class="rank">0${i+1}</span></button>`).join('');
     $('top-dates').querySelectorAll('button').forEach(button=>button.addEventListener('click',()=>setDate(state.region,state.month,Number(button.dataset.day))));
   }
   function renderDetail() {
     const row=current(), levelIndex=levels.indexOf(row.level);
     $('detail-city').textContent=cityNames[state.region];
-    $('detail-date').textContent=`${state.month}월 ${state.day}일 ${weekdays[new Date(2013,state.month-1,state.day).getDay()]}`;
+    $('detail-date').textContent=`${state.month}월 ${state.day}일 ${weekdays[new Date(state.year,state.month-1,state.day).getDay()]}`;
+    $('detail-year').textContent=`${state.year}년 · 과거 패턴 기반`;
     $('detail-grade').className=`detail-grade lv-${row.level}`;
     $('detail-grade').innerHTML=`${levelNames[levelIndex]}${dots(row.level)}`;
     $('detail-description').textContent = levelIndex>=3 ? '다른 날보다 보고가 상대적으로 많을 것으로 계산된 날짜예요.' : levelIndex===2 ? '다른 날과 비교해 중간 수준의 신고 가능성이 계산됐어요.' : '다른 날보다 보고가 상대적으로 적을 것으로 계산된 날짜예요.';
     $('detail-probability').textContent=percent(row.probability);
     $('probability-fill').style.width=`${Math.min(row.probability/.3,1)*100}%`;
-    $('probability-baseline').style.left=`${data.stats.baseline/.3*100}%`;
-    $('baseline-label').textContent=`기준 보고율 ${percent(data.stats.baseline)}`;
+    $('probability-baseline').style.left=`${data.forecast.historical_baseline/.3*100}%`;
+    $('baseline-label').textContent=`과거 보고율 ${percent(data.forecast.historical_baseline)}`;
     $('detail-shape').textContent=shapeNames[row.top_shape] || row.top_shape;
     $('shape-share').textContent=`알려진 모양 중 ${Number(row.top_shape_share_pct).toFixed(1)}%`;
     $('shape-share').style.opacity=row.reports_with_known_shape<30?'.7':'1';
@@ -84,11 +86,14 @@
     $('low-sample').hidden=row.reports_with_known_shape>=30;
     $('low-sample').textContent=`표본 적음 (n=${row.reports_with_known_shape})`;
   }
-  function render(){renderRegions();renderCalendar();renderDetail();}
+  function render(){renderRegions();renderCalendar();renderDetail();window.UFO_ANALYSIS?.update(state.region);}
+  $('year-select').innerHTML=Array.from({length:5},(_,i)=>`<option value="${2026+i}">${2026+i}년</option>`).join('');
+  $('year-select').addEventListener('change',event=>{const year=Number(event.target.value);setDate(state.region,state.month,Math.min(state.day,new Date(year,state.month,0).getDate()),year);});
   $('month-select').innerHTML=Array.from({length:12},(_,i)=>`<option value="${i+1}">${i+1}월</option>`).join('');
-  $('month-select').addEventListener('change',event=>setDate(state.region,Number(event.target.value),Math.min(state.day,new Date(2013,Number(event.target.value),0).getDate())));
-  $('prev-month').addEventListener('click',()=>setDate(state.region,state.month-1,1));
-  $('next-month').addEventListener('click',()=>setDate(state.region,state.month+1,1));
+  $('month-select').addEventListener('change',event=>setDate(state.region,Number(event.target.value),Math.min(state.day,new Date(state.year,Number(event.target.value),0).getDate())));
+  function moveMonth(offset){const date=new Date(state.year,state.month-1+offset,1);setDate(state.region,date.getMonth()+1,1,date.getFullYear());}
+  $('prev-month').addEventListener('click',()=>moveMonth(-1));
+  $('next-month').addEventListener('click',()=>moveMonth(1));
   $('theme-toggle').addEventListener('click',()=>{
     const dark=document.documentElement.dataset.theme!=='dark';
     document.documentElement.dataset.theme=dark?'dark':'light';
@@ -107,7 +112,7 @@
   if (context?.registerTool) {
     const lifecycle=new AbortController();
     try {
-      Promise.resolve(context.registerTool({name:'select_calendar_date',title:'지역과 날짜 선택',description:'2013년 UFO 달력의 지역과 날짜를 선택하고 해당 통계 결과를 확인합니다.',inputSchema:{type:'object',properties:{region:{type:'string',enum:data.regions.map(r=>r.region_id)},month:{type:'integer',minimum:1,maximum:12},day:{type:'integer',minimum:1,maximum:31}},required:['region','month','day'],additionalProperties:false},annotations:{readOnlyHint:false},execute(input){const row=setDate(input.region,input.month,input.day);return {region:state.region,date:row.date,probability:row.probability,level:row.level,shape:row.top_shape,hour:row.top_hour};}},{signal:lifecycle.signal})).catch(()=>{});
+      Promise.resolve(context.registerTool({name:'select_calendar_date',title:'지역과 날짜 선택',description:'2026~2030년 UFO 장기 추정 달력의 지역과 날짜를 선택합니다. 미래 관측 성능은 검증되지 않았습니다.',inputSchema:{type:'object',properties:{region:{type:'string',enum:data.regions.map(r=>r.region_id)},year:{type:'integer',minimum:2026,maximum:2030},month:{type:'integer',minimum:1,maximum:12},day:{type:'integer',minimum:1,maximum:31}},required:['region','year','month','day'],additionalProperties:false},annotations:{readOnlyHint:false},execute(input){const row=setDate(input.region,input.month,input.day,input.year);return {region:state.region,date:row.date,probability:row.probability,level:row.level,shape:row.top_shape,hour:row.top_hour,interpretation:data.forecast.interpretation};}},{signal:lifecycle.signal})).catch(()=>{});
       window.addEventListener('pagehide',()=>lifecycle.abort(),{once:true});
     } catch (_) { /* Browsers without WebMCP retain the visible calendar. */ }
   }
